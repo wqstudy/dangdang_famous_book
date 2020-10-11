@@ -131,7 +131,7 @@ def site_scan():
 
         app = xlwings.App(visible=True, add_book=False)
         wb = app.books.add()
-        url=entry.get() + key + ".xlsx"
+        url=str.strip(entry.get()) + key + ".xlsx"
         wb.save(url)
         sht = wb.sheets["sheet1"]
         while start <= 25:
