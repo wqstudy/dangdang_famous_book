@@ -158,7 +158,7 @@ if __name__ == "__main__":
     button=tkinter.Button(win, text="输出", command=site_scan)
     button.pack()
 
-    label_author=tkinter.Label(win, text="Author:wuqi~ Best wishes~~~")
+    label_author=tkinter.Label(win, text="Author:OMGw~ Best wishes~~~")
     label_author.pack()
 
     win.mainloop()
