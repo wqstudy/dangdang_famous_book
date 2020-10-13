@@ -10,10 +10,11 @@ import time
 import tkinter
 import tkinter.messagebox
 import random
+import pywintypes
 
 def request_construct(url):
     header = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.116 Safari/537.36"
     }
 
     try:
@@ -110,7 +111,37 @@ def request_each_book_Url(each_book_url,sht):
     sht.range(book_ISBN_xls).value = book_ISBN
     sht.range(book_ISBN_xls).columns.autofit()
     print("正在写入----name:" + book_name + "----author:" + book_author + "---- publish:" + book_publishing + "----time:" + book_publishing_time + "----price:" + book_price + "----ISBN:" + book_ISBN)
-    time.sleep(random.random()*3+1)
+    time.sleep(random.random()*4+1)
+
+# def site_scan():
+#     global book_name_colunm
+#     global book_author_colunm
+#     global book_publishing_colunm
+#     global book_publishing_time_colunm
+#     global book_price_colunm
+#     global book_ISBN_colunm
+#     urls={"best_book_novel":"http://bang.dangdang.com/books/bestsellers/01.03.00.00.00.00-24hours-0-0-1-","new_books":"http://bang.dangdang.com/books/newhotsales/01.00.00.00.00.00-24hours-0-0-1-","best_books":"http://bang.dangdang.com/books/bestsellers/01.00.00.00.00.00-24hours-0-0-1-","best_books_army":"http://bang.dangdang.com/books/bestsellers/01.27.00.00.00.00-24hours-0-0-1-"}
+#     for key,value in urls.items():
+#         start = 1
+#         book_name_colunm = 0
+#         book_author_colunm = 0
+#         book_publishing_colunm = 0
+#         book_publishing_time_colunm = 0
+#         book_price_colunm = 0
+#         book_ISBN_colunm = 0
+#
+#         app = xlwings.App(visible=True, add_book=False)
+#         wb = app.books.add()
+#         url=str.strip(entry_path.get()) + key + ".xlsx"
+#         wb.save(url)
+#         sht = wb.sheets["sheet1"]
+#         while start <= 25:
+#             request_best_books_url(value + str(start),sht)
+#             start = start + 1
+#         wb.save()
+#         wb.close()
+#         app.quit()
+#     tkinter.messagebox.showinfo('警告','输入完成！！！')
 
 def site_scan():
     global book_name_colunm
@@ -119,41 +150,53 @@ def site_scan():
     global book_publishing_time_colunm
     global book_price_colunm
     global book_ISBN_colunm
-    urls={"new_books":"http://bang.dangdang.com/books/newhotsales/01.00.00.00.00.00-24hours-0-0-1-","best_books":"http://bang.dangdang.com/books/bestsellers/01.00.00.00.00.00-24hours-0-0-1-","best_books_army":"http://bang.dangdang.com/books/bestsellers/01.27.00.00.00.00-24hours-0-0-1-"}
-    for key,value in urls.items():
-        start = 1
-        book_name_colunm = 0
-        book_author_colunm = 0
-        book_publishing_colunm = 0
-        book_publishing_time_colunm = 0
-        book_price_colunm = 0
-        book_ISBN_colunm = 0
+    book_name_colunm = 0
+    book_author_colunm = 0
+    book_publishing_colunm = 0
+    book_publishing_time_colunm = 0
+    book_price_colunm = 0
+    book_ISBN_colunm = 0
 
-        app = xlwings.App(visible=True, add_book=False)
-        wb = app.books.add()
-        url=str.strip(entry.get()) + key + ".xlsx"
-        wb.save(url)
-        sht = wb.sheets["sheet1"]
-        while start <= 25:
-            request_best_books_url(value + str(start),sht)
-            start = start + 1
-        wb.save()
-        wb.close()
-        app.quit()
-    tkinter.messagebox.showinfo('警告','输入完成！！！')
+    url_site = str.strip(entry_site.get())[:-1]
+    start = 1
+    app = xlwings.App(visible=True, add_book=False)
+    wb = app.books.add()
+    url_path = str.strip(entry_path.get()) + "desired_book" + ".xlsx"
+
+    try:
+        wb.save(url_path)
+    except pywintypes.com_error:
+        tkinter.messagebox.showinfo('警告', '请关闭desired_book.xlsx')
+
+    sht = wb.sheets["sheet1"]
+    while start <= 25:
+        request_best_books_url(url_site + str(start), sht)
+        start = start + 1
+    wb.save()
+    wb.close()
+    app.quit()
+    tkinter.messagebox.showinfo('警告', '输入完成！！！')
 
 if __name__ == "__main__":
     win=tkinter.Tk()
-    win.title("Top500一键输出 v1.02")
-    win.geometry("400x200+200+50")
+    win.title("Top500一键输出 v1.03")
+    win.geometry("600x200+200+50")
 
-    label_path=tkinter.Label(win, text="请输入书单的地址")
+    label_path=tkinter.Label(win, text="请输入书单的存储地址")
     label_path.pack()
     label_format=tkinter.Label(win, text="格式（注意“/”方向）,比如：C:/Users/XXX/Desktop/")
     label_format.pack()
 
-    entry=tkinter.Entry(win)
-    entry.pack()
+    entry_path=tkinter.Entry(win)
+    entry_path.pack()
+
+    label_site = tkinter.Label(win, text="请输入书单的网页地址")
+    label_site.pack()
+    label_site_format = tkinter.Label(win, text="格式,比如：http://bang.dangdang.com/books/newhotsales/01.00.00.00.00.00-24hours-0-0-1-1")
+    label_site_format.pack()
+
+    entry_site=tkinter.Entry(win)
+    entry_site.pack()
 
     button=tkinter.Button(win, text="输出", command=site_scan)
     button.pack()
@@ -162,6 +205,7 @@ if __name__ == "__main__":
     label_author.pack()
 
     win.mainloop()
+    #pyinstaller -F -w dangdang_famous_book.py
 
 
 
