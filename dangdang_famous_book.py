@@ -161,6 +161,13 @@ def site_scan():
     start = 1
     app = xlwings.App(visible=True, add_book=False)
     wb = app.books.add()
+
+    try:
+        if re.match(r'^[A-Z]:(/.*?)*/$',str.strip(entry_path.get()))==None:
+            tkinter.messagebox.showinfo('警告', '格式错误，请检查结尾是否存在/，或/的方向')
+    except SyntaxError:
+        tkinter.messagebox.showinfo('警告', '格式错误，请检查/方向')
+
     url_path = str.strip(entry_path.get()) + "desired_book" + ".xlsx"
 
     try:
