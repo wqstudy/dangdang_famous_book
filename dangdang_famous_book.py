@@ -126,36 +126,6 @@ def request_each_book_Url(each_book_url,sht):
     print("正在写入----name:" + book_name + "----author:" + book_author + "---- publish:" + book_publishing + "----time:" + book_publishing_time + "----price:" + book_price + "----ISBN:" + book_ISBN)
     time.sleep(random.random()*4+1)
 
-# def site_scan():
-#     global book_name_colunm
-#     global book_author_colunm
-#     global book_publishing_colunm
-#     global book_publishing_time_colunm
-#     global book_price_colunm
-#     global book_ISBN_colunm
-#     urls={"best_book_novel":"http://bang.dangdang.com/books/bestsellers/01.03.00.00.00.00-24hours-0-0-1-","new_books":"http://bang.dangdang.com/books/newhotsales/01.00.00.00.00.00-24hours-0-0-1-","best_books":"http://bang.dangdang.com/books/bestsellers/01.00.00.00.00.00-24hours-0-0-1-","best_books_army":"http://bang.dangdang.com/books/bestsellers/01.27.00.00.00.00-24hours-0-0-1-"}
-#     for key,value in urls.items():
-#         start = 1
-#         book_name_colunm = 0
-#         book_author_colunm = 0
-#         book_publishing_colunm = 0
-#         book_publishing_time_colunm = 0
-#         book_price_colunm = 0
-#         book_ISBN_colunm = 0
-#
-#         app = xlwings.App(visible=True, add_book=False)
-#         wb = app.books.add()
-#         url=str.strip(entry_path.get()) + key + ".xlsx"
-#         wb.save(url)
-#         sht = wb.sheets["sheet1"]
-#         while start <= 25:
-#             request_best_books_url(value + str(start),sht)
-#             start = start + 1
-#         wb.save()
-#         wb.close()
-#         app.quit()
-#     tkinter.messagebox.showinfo('警告','输入完成！！！')
-
 def site_scan():
     global book_name_colunm
     global book_author_colunm
