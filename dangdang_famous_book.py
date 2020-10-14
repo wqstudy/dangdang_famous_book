@@ -12,12 +12,25 @@ import tkinter.messagebox
 import random
 import pywintypes
 
+def get_agent():
+    '''
+    模拟header的user-agent字段，
+    返回一个随机的user-agent字典类型的键值对
+    '''
+    agents = ['Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0;',
+              'Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto/2.8.131 Version/11.11',
+              'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)',
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.116 Safari/537.36',
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv,2.0.1) Gecko/20100101 Firefox/4.0.1']
+    fakeheader = {}
+    fakeheader['User-agent'] = agents[random.randint(0, len(agents)-1)]
+    return fakeheader
+
 def request_construct(url):
-    header = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.116 Safari/537.36"
-    }
+    header = get_agent()
 
     try:
+        #response = requests.get(url, proxies=proxies)
         response = requests.get(url=url, headers=header).text
     except requests.exceptions.ConnectionError:
         print('警告：遭遇反爬虫机制，休息30秒')
@@ -157,18 +170,21 @@ def site_scan():
     book_price_colunm = 0
     book_ISBN_colunm = 0
 
-    url_site = str.strip(entry_site.get())[:-1]
+    input_path=str.strip(entry_path.get())
+    url_site = str.strip(entry_site.get())
+
+    url_site = url_site[:-1]
     start = 1
     app = xlwings.App(visible=True, add_book=False)
     wb = app.books.add()
 
     try:
-        if re.match(r'^[A-Z]:(/.*?)*/$',str.strip(entry_path.get()))==None:
+        if re.match(r'^[A-Z]:(/.*?)*/$',input_path)==None:
             tkinter.messagebox.showinfo('警告', '格式错误，请检查结尾是否存在/，或/的方向')
     except SyntaxError:
         tkinter.messagebox.showinfo('警告', '格式错误，请检查/方向')
 
-    url_path = str.strip(entry_path.get()) + "desired_book" + ".xlsx"
+    url_path = input_path + "desired_book" + ".xlsx"
 
     try:
         wb.save(url_path)
